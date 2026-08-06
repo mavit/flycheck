@@ -15933,7 +15933,16 @@ See URL `https://proselint.com/' for more information about proselint."
                      :end-pos (+ .end (flycheck--proselint-off-by-one-correction
                                        buffer
                                        .end))
-                     :fix (when .replacements
+                     :fix (when (and .replacements
+                                     ;; Ignore replacement "[\.\?!]  [A-Z]"
+                                     ;; from consistency.spacing:
+                                     (not (string-match-p
+                                           (rx string-start
+                                               "[\\.\\?!] "
+                                               (zero-or-one " ")
+                                               "[A-Z]"
+                                               string-end)
+                                           .replacements)))
                             (flycheck--make-fix
                              buffer
                              .replacements
