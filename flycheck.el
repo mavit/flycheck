@@ -15934,15 +15934,15 @@ See URL `https://proselint.com/' for more information about proselint."
                                        buffer
                                        .end))
                      :fix (when .replacements
-                            (flycheck-fix-new
-                             :description .replacements
-                             :edits (list (flycheck-fix-edit-new
-                                           :line .line
-                                           :column .column
-                                           :end-line .line
-                                           :end-column (+ .column .extent -1)
-                                           :replacement .replacements))
-                             :tick (buffer-chars-modified-tick))))))
+                            (flycheck--make-fix
+                             buffer
+                             .replacements
+                             (list (flycheck-fix-edit-new
+                                    :line .line
+                                    :column .column
+                                    :end-line .line
+                                    :end-column (+ .column .extent -1)
+                                    :replacement .replacements)))))))
                 (let-alist (car response)
                   .data.errors))
       ;; Proselint versions >= 0.16.0
@@ -15957,17 +15957,17 @@ See URL `https://proselint.com/' for more information about proselint."
                    :checker checker
                    :end-pos (nth 1 .span)
                    :fix (when .replacements
-                          (flycheck-fix-new
-                           :description .replacements
-                           :edits (list (flycheck-fix-edit-new
-                                         :line (nth 0 .pos)
-                                         :column (nth 1 .pos)
-                                         :end-line (nth 0 .pos)
-                                         :end-column (+ (nth 1 .pos)
-                                                        (- (nth 1 .span)
-                                                           (nth 0 .span)))
-                                         :replacement .replacements))
-                           :tick (buffer-chars-modified-tick))))))
+                          (flycheck--make-fix
+                           buffer
+                           .replacements
+                           (list (flycheck-fix-edit-new
+                                  :line (nth 0 .pos)
+                                  :column (nth 1 .pos)
+                                  :end-line (nth 0 .pos)
+                                  :end-column (+ (nth 1 .pos)
+                                                 (- (nth 1 .span)
+                                                    (nth 0 .span)))
+                                  :replacement .replacements)))))))
               (let-alist (car response)
                 .result.<stdin>.diagnostics)))))
 
